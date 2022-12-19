@@ -74,7 +74,7 @@ args = parser.parse_args();
 def main_worker(args):
 
     ## Load models
-    s = EmbedNet(**vars(args)).cuda();
+    s = EmbedNet2(**vars(args)).cuda();
 
     it          = 1
 
@@ -83,6 +83,8 @@ def main_worker(args):
         [transforms.ToTensor(),
          transforms.Resize(256),
          transforms.RandomCrop([224,224]),
+         transforms.RandomHorizontalFlip(),
+         transforms.RandomRotation(20),
          transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])])
 
     ## Input transformations for evaluation
@@ -94,7 +96,7 @@ def main_worker(args):
 
     ## Initialise trainer and data loader
     trainLoader = get_data_loader(transform=train_transform, **vars(args));
-    trainer     = ModelTrainer(s, **vars(args))
+    trainer     = ModelTrainer(s, **vars(args)) 
 
     ## Load model weights
     modelfiles = glob.glob('{}/model0*.model'.format(args.save_path))
@@ -119,7 +121,7 @@ def main_worker(args):
     
     ## Evaluation code 
     if args.eval == True:
-
+        
         sc, lab, trials = trainer.evaluateFromList(transform=test_transform, **vars(args))
         result = tuneThresholdfromScore(sc, lab, [1, 0.1]);
 

@@ -10,10 +10,10 @@ from DatasetLoader import test_dataset_loader
 from torch.cuda.amp import autocast, GradScaler
 from tqdm import tqdm
 
-class EmbedNet(nn.Module):
+class EmbedNet2(nn.Module):
 
     def __init__(self, model, optimizer, trainfunc, nPerClass, **kwargs):
-        super(EmbedNet, self).__init__();
+        super(EmbedNet2, self).__init__();
 
         ## __S__ is the embedding model
         EmbedNetModel = importlib.import_module('models.'+model).__getattribute__('MainModel')
@@ -48,7 +48,10 @@ class ModelTrainer(object):
 
         ## Optimizer (e.g. Adam or SGD)
         Optimizer = importlib.import_module('optimizer.'+optimizer).__getattribute__('Optimizer')
-        self.__optimizer__ = Optimizer(self.__model__.parameters(), **kwargs)
+        self.__optimizer__ = Optimizer([
+                {'params': self.__model__.__S__.parameters()},
+                {'params': self.__model__.__L__.parameters(), 'lr': 2e-6}
+            ], **kwargs)
 
         ## Learning rate scheduler
         Scheduler = importlib.import_module('scheduler.'+scheduler).__getattribute__('Scheduler')
