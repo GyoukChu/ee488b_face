@@ -35,6 +35,19 @@ ResNet18
 
 You can add new models and loss functions to `models` and `loss` directories respectively. See the existing definitions for examples.
 
+### Download Dataset
+```
+wget https://mm.kaist.ac.kr/teaching/ee488b/resources/val_pairs.csv
+wget https://mm.kaist.ac.kr/teaching/ee488b/resources/ee488b_data_v1.zip
+unzip ee488b_data_v1.zip
+```
+
+* This is optional.
+```
+wget https://mm.kaist.ac.kr/teaching/ee488b/resources/vggface2_train.zip
+unzip vggface2_train.zip
+```
+
 ### Data
 
 The test list should contain labels and image pairs, one line per pair, as follows. `1` is a target and `0` is an imposter.
